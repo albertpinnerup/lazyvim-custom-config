@@ -6,9 +6,9 @@
 --
 local opt = vim.opt
 
-opt.relativenumber = false
+opt.relativenumber = true
 
-opt.foldcolumn = '1' -- '0' is not bad
+opt.foldcolumn = "1" -- '0' is not bad
 opt.foldlevel = 99 -- Using ufo provider need a large value, feel free to decrease the value
 opt.foldlevelstart = 99
 opt.foldenable = true
@@ -20,18 +20,19 @@ opt.foldenable = true
 --     foldsep = "│"
 -- }
 
-vim.keymap.set("n", "<A-j>", ":m .+1<CR>==", {
-    desc = "Move line down"
+--[[ vim.keymap.set("n", "<A-j>", ":m .+1<CR>==", {
+    desc = "Move line down",
 })
 vim.keymap.set("n", "<A-k>", ":m .-2<CR>==", {
-    desc = "Move line up"
+    desc = "Move line up",
 })
 
 -- Move selected lines up/down
 vim.keymap.set("v", "<A-j>", ":m '>+1<CR>gv=gv", {
-    desc = "Move selection down"
+    desc = "Move selection down",
 })
 vim.keymap.set("v", "<A-k>", ":m '<-2<CR>gv=gv", {
-    desc = "Move selection up"
-})
+    desc = "Move selection up",
+}) ]]
 
+opt.termguicolors = true
