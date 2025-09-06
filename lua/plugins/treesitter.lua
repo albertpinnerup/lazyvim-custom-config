@@ -7,10 +7,10 @@ return {
             playground = {
                 enable = true,
             },
-            --[[  highlight = {
-            enable = true
-        }, ]]
-            -- indent = { enable = false },
+            highlight = {
+                enable = true,
+            },
+            indent = { enable = false },
         },
     },
 }
