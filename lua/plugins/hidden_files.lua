@@ -1,15 +1,15 @@
 return {
-  {
-    "ibhagwan/fzf-lua",
-    opts = function(_, opts)
-      opts = opts or {}
-      opts.files = opts.files or {}
-      opts.files.fd_opts = [[--color=never --type f --hidden --follow --exclude .git]]
-      return opts
-    end,
-  },
+    {
+        "ibhagwan/fzf-lua",
+        opts = function(_, opts)
+            opts = opts or {}
+            opts.files = opts.files or {}
+            opts.files.fd_opts = [[--color=never --type f --hidden --follow --exclude .git]]
+            return opts
+        end,
+    },
 
-  {
+    --[[ {
     "nvim-telescope/telescope.nvim",
     opts = function(_, opts)
       -- make sure defaults exists
@@ -33,9 +33,9 @@ return {
       -- file_ignore_patterns exists
       opts.defaults.file_ignore_patterns = opts.defaults.file_ignore_patterns or {}
     end,
-  },
+  } ]]
 
-  {
+    --[[ {
     "nvim-telescope/telescope-file-browser.nvim",
     dependencies = { "nvim-telescope/telescope.nvim" },
     config = function()
@@ -47,12 +47,12 @@ return {
         })
       end, { desc = "File Browser (show hidden files)" })
     end,
-  },
+  } ]]
 
-  {
-    "nvim-tree/nvim-tree.lua",
-    opts = {
-      filters = { dotfiles = false }, -- show hidden files
+    {
+        "nvim-tree/nvim-tree.lua",
+        opts = {
+            filters = { dotfiles = false }, -- show hidden files
+        },
     },
-  },
 }

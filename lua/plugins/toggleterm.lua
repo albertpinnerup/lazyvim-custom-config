@@ -4,15 +4,17 @@ return {
         version = "*",
         opts = {
             size = 20,
-            open_mapping = [[<leader>tt]],
+            open_mapping = nil,
             insert_mappings = false,
             direction = "horizontal", -- can be "vertical", "float", etc.
-            autchdir = true,
+            autochdir = true,
         },
         config = function(_, opts)
             require("toggleterm").setup(opts)
 
             local Terminal = require("toggleterm.terminal").Terminal
+
+            local float_term = nil
 
             local terminals = {}
 
@@ -21,8 +23,39 @@ return {
                 desc = "Exit terminal mode",
             })
 
+            -- In terminal mode: ESC leaves terminal mode. Add a second key if you want close-on-ESC for floats:
+            vim.keymap.set("n", "q", function()
+                local win = vim.api.nvim_get_current_win()
+                local cfg = vim.api.nvim_win_get_config(win)
+                if cfg.relative ~= "" and float_term and float_term:is_open() then
+                    float_term:toggle()
+                else
+                    for _, term in ipairs(terminals) do
+                        if term.direction ~= "float" and term:is_open() then
+                            term:toggle()
+                        end
+                    end
+                end
+            end, { desc = "Close float or exit terminal mode" })
+
+            vim.keymap.set("n", "<leader>tq", function()
+                local buf = vim.api.nvim_get_current_buf()
+                for i, term in ipairs(terminals) do
+                    if term.bufnr == buf then
+                        term:shutdown()
+                        table.remove(terminals, i)
+                        break
+                    end
+                end
+            end, { desc = "Kill terminal in current window" })
             -- Open a new terminal
             vim.keymap.set("n", "<leader>tn", function()
+                local win = vim.api.nvim_get_current_win()
+                local cfg = vim.api.nvim_win_get_config(win)
+                if cfg.relative ~= "" and float_term and float_term:is_open() then
+                    float_term:toggle()
+                end
+
                 local term = Terminal:new({
                     direction = "horizontal", -- change to "float" or "vertical" if desired
                     close_on_exit = false,
@@ -32,8 +65,27 @@ return {
                 term:toggle()
             end, { desc = "Open new terminal" })
 
+            vim.keymap.set("n", "<leader>tf", function()
+                if float_term == nil then
+                    float_term = Terminal:new({
+                        direction = "float",
+                        close_on_exit = false,
+                        auto_scroll = true,
+                        dir = "git_dir",
+                    })
+                    table.insert(terminals, float_term)
+                end
+                float_term:toggle()
+            end, { desc = "Open floating terminal" })
+
             -- toggle the last terminal if exists, otherwise open a new one
             vim.keymap.set("n", "<leader>tt", function()
+                local win = vim.api.nvim_get_current_win()
+                local cfg = vim.api.nvim_win_get_config(win)
+                if cfg.relative ~= "" and float_term and float_term:is_open() then
+                    float_term:toggle()
+                end
+
                 if #terminals == 0 then
                     local term = Terminal:new({
                         direction = "horizontal",
@@ -44,22 +96,22 @@ return {
                     term:toggle()
                 else
                     for _, term in ipairs(terminals) do
-                        term:toggle()
+                        if term.direction ~= "float" then
+                            term:toggle()
+                        end
                     end
                 end
             end, { desc = "Toggle last terminal" })
 
             -- Close the terminal in the current buffer
-            vim.keymap.set("n", "<leader>td", function()
+            vim.keymap.set("n", "<leader>th", function()
                 local buf = vim.api.nvim_get_current_buf()
-                for i, term in ipairs(terminals) do
+                for _, term in ipairs(terminals) do
                     if term.bufnr == buf then
-                        term:close()
-                        table.remove(terminals, i)
-                        break
+                        term:toggle()
                     end
                 end
-            end, { desc = "Close terminal in current window" })
+            end, { desc = "Hide terminal in current window" })
         end,
     },
 }

@@ -6,6 +6,10 @@ return {
             dashboard = {
                 autokeys = "1234567890abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ", -- autokey sequence
                 -- These settings are used by some built-in sections
+
+                vim.keymap.set("n", "<S-tab>", function()
+                    require("snacks").dashboard()
+                end, { desc = "open snacks dashboard" }),
                 preset = {
                     -- Defaults to a picker that supports `fzf-lua`, `telescope.nvim` and `mini.pick`
                     ---@type fun(cmd:string, opts:table)|nil
@@ -111,9 +115,32 @@ return {
                         hidden = true,
                     },
                     explorer = {
-                        enabled = false,
+                        enabled = true,
+                        auto_close = true,
+                        layout = {
+                            { preview = true },
+                            layout = {
+                                box = "horizontal",
+                                width = 0.8,
+                                height = 0.8,
+                                {
+                                    box = "vertical",
+                                    border = "rounded",
+                                    title = "{source} {live} {flags}",
+                                    title_pos = "center",
+                                    { win = "input", height = 1, border = "bottom" },
+                                    { win = "list", border = "none" },
+                                },
+                                { win = "preview", border = "rounded", width = 0.7, title = "{preview}" },
+                            },
+                        },
                     },
                 },
+            },
+            image = {
+                enabled = true,
+                inline = false,
+                float = { border = "rounded" },
             },
         },
     },

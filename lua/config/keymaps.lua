@@ -29,6 +29,10 @@ local function safe_fold(cmd)
     end
 end
 
+vim.keymap.set("n", "<S-tab>", function()
+    require("snacks").dashboard()
+end, { desc = "open snacks dashboard" })
+
 -- Replace default fold keys with “safe” versions
 vim.keymap.set("n", "zc", function()
     safe_fold("zc")
