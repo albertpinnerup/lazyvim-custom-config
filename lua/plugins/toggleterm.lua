@@ -8,20 +8,42 @@ return {
             insert_mappings = false,
             direction = "horizontal", -- can be "vertical", "float", etc.
             autochdir = true,
+            terminal_mappings = false,
         },
         config = function(_, opts)
             require("toggleterm").setup(opts)
+
+            -- Terminal buffers: keep Esc from closing the window
+            --
+            vim.api.nvim_create_autocmd("FileType", {
+                pattern = "toggleterm",
+                callback = function(ev)
+                    -- In terminal-insert: Esc -> terminal-normal
+                    vim.keymap.set("t", "<Esc>", [[<C-\><C-n>]], {
+                        buffer = ev.buf,
+                        noremap = true,
+                        nowait = true,
+                        silent = true,
+                    })
+                    -- In terminal-normal: Esc should NOT close the window
+                    -- pick one:
+                    -- a) do nothing destructive
+                    vim.keymap.set("n", "<Esc>", "<Esc>", {
+                        buffer = ev.buf,
+                        noremap = true,
+                        nowait = true,
+                        silent = true,
+                    })
+                    -- b) or literally do nothing:
+                    -- vim.keymap.set("n", "<Esc>", "<Nop>", { buffer = ev.buf, noremap = true, nowait = true, silent = true })
+                end,
+            })
 
             local Terminal = require("toggleterm.terminal").Terminal
 
             local float_term = nil
 
             local terminals = {}
-
-            -- Add any additional keymaps here
-            vim.keymap.set("t", "<Esc>", [[<C-\><C-n>]], {
-                desc = "Exit terminal mode",
-            })
 
             -- In terminal mode: ESC leaves terminal mode. Add a second key if you want close-on-ESC for floats:
             vim.keymap.set("n", "q", function()
@@ -63,6 +85,7 @@ return {
                 })
                 table.insert(terminals, term)
                 term:toggle()
+                vim.cmd("startinsert")
             end, { desc = "Open new terminal" })
 
             vim.keymap.set("n", "<leader>tf", function()
@@ -76,6 +99,7 @@ return {
                     table.insert(terminals, float_term)
                 end
                 float_term:toggle()
+                vim.cmd("startinsert")
             end, { desc = "Open floating terminal" })
 
             -- toggle the last terminal if exists, otherwise open a new one
@@ -94,10 +118,12 @@ return {
                     })
                     table.insert(terminals, term)
                     term:toggle()
+                    vim.cmd("startinsert")
                 else
                     for _, term in ipairs(terminals) do
                         if term.direction ~= "float" then
                             term:toggle()
+                            vim.cmd("startinsert")
                         end
                     end
                 end
