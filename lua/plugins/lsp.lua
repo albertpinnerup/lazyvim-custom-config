@@ -4,23 +4,6 @@ return {
     event = { "BufReadPre", "BufNewFile" },
     opts = {
         servers = {
-            intelephense = {
-                single_file_support = true,
-                root_dir = function(fname)
-                    local util = require("lspconfig.util")
-                    local uv = vim.uv or vim.loop
-                    local start = fname or (uv and uv.cwd()) or vim.fn.getcwd()
-                    -- prefer a git repo if present
-                    local git = vim.fs.find(".git", { path = start, upward = true })[1]
-                    if git then
-                        return vim.fs.dirname(git)
-                    end
-                    -- then common PHP roots
-                    local root = util.root_pattern("composer.json", "psalm.xml", "psalm.xml.dist")(start)
-                    -- fallback = CWD so it *always* attaches
-                    return root or (uv and uv.cwd()) or vim.fn.getcwd()
-                end,
-            },
             -- keep Psalm only when a config exists (avoids exit code 1)
             psalm = {
                 single_file_support = false,
@@ -46,6 +29,21 @@ return {
                     "typescriptreact",
                     "php",
                     "blade",
+                },
+            },
+            cssls = {
+                settings = {
+                    css = {
+                        completion = {
+                            completePropertyWithSemiColon = true,
+                        },
+                    },
+                    scss = {
+                        completion = {
+                            completePropertyWithSemicolon = true,
+                            triggerPropertyValueCompletion = false,
+                        },
+                    },
                 },
             },
         },

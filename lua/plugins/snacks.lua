@@ -113,6 +113,7 @@ return {
                 sources = {
                     files = {
                         hidden = true,
+                        ignored = true,
                     },
                     explorer = {
                         enabled = true,

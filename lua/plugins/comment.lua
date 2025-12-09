@@ -9,9 +9,7 @@ return {
 
     {
         "numToStr/Comment.nvim",
-        dependencies = {
-            "nvim-ts-context-commentstring",
-        },
+        dependencies = { "JoosepAlviste/nvim-ts-context-commentstring" },
         opts = function()
             local present, ctx = pcall(require, "ts_context_commentstring.integrations.comment_nvim")
             return {
