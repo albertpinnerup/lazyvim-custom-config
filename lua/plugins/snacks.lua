@@ -143,6 +143,7 @@ return {
                 inline = false,
                 float = { border = "rounded" },
             },
+            lazygit = {},
         },
     },
 }
