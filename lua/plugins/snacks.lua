@@ -137,6 +137,10 @@ return {
                         },
                     },
                 },
+                matcher = {
+                    fuzzy = true,
+                    file_pos = true,
+                },
             },
             image = {
                 enabled = true,
@@ -144,6 +148,8 @@ return {
                 float = { border = "rounded" },
             },
             lazygit = {},
+            scroll = {},
+            animate = {},
         },
     },
 }

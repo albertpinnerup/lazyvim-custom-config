@@ -16,6 +16,11 @@ return {
         opts = function(_, opts)
             opts = opts or {}
             opts.provider = "copilot" -- same as LazyExtra, just explicit
+
+            opts.web_search_engine = {
+                provider = "google",
+                proxy = nil,
+            }
             return opts
         end,
     },
