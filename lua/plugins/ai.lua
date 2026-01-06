@@ -4,7 +4,10 @@ return {
         "zbirenbaum/copilot.lua",
         -- This plugin already has opts from LazyVim's ai.copilot extra.
         -- We only change WHEN it loads.
-        event = "VeryLazy",
+        event = "bufReadPre",
+        config = function()
+            require("copilot").setup({})
+        end,
     },
 
     -- Ensure Avante waits for copilot.lua to be ready
