@@ -4,9 +4,23 @@ return {
         "zbirenbaum/copilot.lua",
         -- This plugin already has opts from LazyVim's ai.copilot extra.
         -- We only change WHEN it loads.
-        event = "bufReadPre",
+        event = "InsertEnter",
         config = function()
-            require("copilot").setup({})
+            require("copilot").setup({
+                suggestion = {
+                    enabled = true,
+                    auto_trigger = true,
+
+                    -- IMPORTANT for your Blink setup:
+                    keymap = {
+                        accept = "<C-CR>", -- do NOT use Tab / Space
+                        next = "<M-]>",
+                        prev = "<M-[>",
+                        dismiss = "<C-]>",
+                    },
+                },
+                panel = { enabled = false }, -- keep it inline-only
+            })
         end,
     },
 
