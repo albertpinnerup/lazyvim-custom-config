@@ -141,6 +141,10 @@ return {
                     fuzzy = true,
                     file_pos = true,
                 },
+                jump = {
+                    reuse_win = true,
+                    close = false,
+                },
             },
             image = {
                 enabled = true,
